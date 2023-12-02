@@ -137,5 +137,5 @@ public class Main {
                 6️⃣ - View all users
                 7️⃣ - Exit
                 """);
-    }
+     }
 }
