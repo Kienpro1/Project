@@ -5,12 +5,16 @@
 
 package Model;
 
+import javax.swing.*;
+
 /**
  *
  * @author Hi
  */
 public class Sinhvien {
+
     private String maSV,hoTen,maLop,gioiTinh,sdt;
+
     public Sinhvien(){
         
     }

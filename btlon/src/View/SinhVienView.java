@@ -17,15 +17,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -40,6 +34,8 @@ public class SinhVienView implements ActionListener {
     public JTextField maSVTxt, hoTenTxt, maLopTxt, gioiTinhTxt, sdtTxt, searchTxt;
     public JButton add, edit, delete, clear, sortByMa, sortByName, search, excel, exit;
     JTable sinhvienTable;
+    private JCheckBox checkBox;
+
     String[] columnNames = {"MaSV", "HoTen", "MaLop", "GioiTinh", "SDT"};
     DefaultTableModel tableModel;
 
@@ -73,7 +69,6 @@ public class SinhVienView implements ActionListener {
         excel = new JButton("EXCEL");
         exit = new JButton("Exit");
 
-        j.setLayout(new BorderLayout());
 
         JPanel p1 = new JPanel(new GridBagLayout());
         JPanel pp = new JPanel(new FlowLayout(10, 30, 50));
@@ -200,7 +195,28 @@ public class SinhVienView implements ActionListener {
         excel.addActionListener(this);
 
         DaoSinhVien std = new DaoSinhVien();
-        hienthi_tbl(std);
+        hienthi_tbl(std);        checkBox = new JCheckBox("Filter by status");
+
+        j.add(checkBox);
+        j.setLayout(new BorderLayout());
+        checkBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                filterData(checkBox.isSelected());
+            }
+
+            private void filterData(boolean status) {
+                TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
+                sinhvienTable.setRowSorter(sorter);
+                if (status) {
+                    sorter.setRowFilter(RowFilter.regexFilter("Đạt", 1));
+                } else {
+                    sorter.setRowFilter(null);
+                }
+            }
+        });
+
+
         sinhvienTable.addMouseListener(new MouseListener() {
 
             public void mouseClicked(MouseEvent e) {
@@ -359,7 +375,7 @@ public class SinhVienView implements ActionListener {
         std.rsTableModel(sinhvienTable, tableModel);
     }
 
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(sinhvienfrm::new);
-//    }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(SinhVienView::new);
+    }
 }
